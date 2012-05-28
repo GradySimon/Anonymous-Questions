@@ -1,0 +1,31 @@
+{% if error_msg %}
+    <p id="error_msg">{{ error_msg }}</p>
+    {% if prev_answer %}
+        <p id="prev_answer_message">Here's the answer you entered, in full. It was {{ prev_answer|length }} characters.</p>
+        <p id="prev_answer">{{ prev_answer }}</p>
+    {% endif %}
+    {% if prev_question %}
+        <p id="prev_question_message">Here's the question you entered, in full. It was {prev_question|length }} characters.</p>
+        <p id="prev_question">{{ prev_question }}</p>
+    {% endif %}
+{% endif %}
+<h1 id="index_header">Anonymous Questions to the ITLPs</h1>
+<p id="explaination">I (Grady Simon) wrote this in a few hours in Python/Django. As far as this app is concerned, your questions and answers are submitted entirely anonymously. I don't store IP addresses. There are no cookies. No identifiable information is stored at all. The only thing that is stored in the database is the text of the questions and answers and the date and time of their submission. This can all be verified by viewing the source code (linked to below). Also, there is no authentication. As a side-effect, there is no way to guarantee that the answers are actually from ITLPs or anyone at GE.</p>
+<p id="link_to_source">The source code can be found at <a href="http://github.com/genre/Anonymous-Questions">GitHub</a>.</p> 
+<p>Also, as you can see, web design isn't really my thing. If anyone feels like contributing some better HTML and some CSS, I would welcome it. Contact me.</p>
+<h2 id="question_prompt">To ask a question to the ITLPs, enter it in the text box below.</h2>
+<form action="/questions/ask/" method="post">
+    {% csrf_token %}
+    <textarea cols=50 rows=10 name="question">Please limit your question to 1000 characters.</textarea><br />
+    <input type="submit" value="Ask" />
+</form> 
+<h2 id="question_header">Questions:</h2>
+{% if questions %}
+    <ul id="question_list">
+    {% for question in questions %}
+        <li><a href="/questions/{{ question.id }}/">{{ question.question }}</a> -- {{ question.answer_set.all|length }} answers</li>
+    {% endfor %}
+{% else %}
+    <p id="no_questions_message">There are no questions to display</p>
+{% endif %}
+

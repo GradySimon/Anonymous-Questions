@@ -1,0 +1,17 @@
+<h1 id="question_detail_header">Question:</h1>
+<p id="question">{{ question.question }}</p>
+<form action="/questions/{{ question.id }}/answer/" method="post">
+    {% csrf_token %}
+    <textarea cols="50" rows="10" name="answer">Please limit your answer to 2000 characters.</textarea><br />
+    <input type="submit" value="Submit">
+</form>
+<h2 id="answer_header">Answers:</h2>
+{% if question.answer_set.all %}
+    <ul id="answer_list">
+        {% for answer in question.answer_set.all %}
+            <li>{{ answer.answer }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p id="no_answers">There are not yet any answers to this question</p>
+{% endif %}          
